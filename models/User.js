@@ -61,7 +61,9 @@ const UserSchema = new Schema(
             phoneNumber: {
                 type: String
             },
-        }
+        },
+        sessions: [{type: String}]
+
     }, {
         timestamps: true,
     }

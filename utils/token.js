@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
 
 export const generateAccessToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_ACCESS_KEY, { expiresIn: "1d" });
+  return jwt.sign({ id }, process.env.JWT_ACCESS_KEY, { expiresIn: "5min" });
 };
 
 export const generateRefreshToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_REFRESH_KEY, { expiresIn: "7d" });
+  return jwt.sign({ id }, process.env.JWT_REFRESH_KEY, { expiresIn: "1d" });
 };
 
 export const getTokenFromHeader = (req) => {
@@ -27,3 +27,4 @@ export const verifyToken = (token, secret) => {
         }
     })
 }
+

@@ -44,7 +44,7 @@ export const loginUser = async (req, res) => {
 
     const { email, password } = req.body;
 
-    //Find the user by emall
+    //Find the user by emaisl
     const userFound = await User.findOne({ email });
 
     if (userFound && (await bcrypt.compare(password, userFound?.password))) {
