@@ -1,13 +1,16 @@
 import jwt from 'jsonwebtoken';
 
+//generates access token
 export const generateAccessToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_ACCESS_KEY, { expiresIn: "5min" });
 };
 
+//generate refresh token
 export const generateRefreshToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_REFRESH_KEY, { expiresIn: "1d" });
 };
 
+//gets access token from headers.authorization 
 export const getTokenFromHeader = (req) => {
     const token = req?.headers?.authorization?.split(" ")[1];
 
@@ -18,6 +21,7 @@ export const getTokenFromHeader = (req) => {
     return token
 }   
 
+// verifies token
 export const verifyToken = (token, secret) => {
     return jwt.verify(token, secret, (err, decoded) =>{
         if(err){
