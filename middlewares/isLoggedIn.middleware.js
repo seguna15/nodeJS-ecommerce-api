@@ -1,5 +1,5 @@
-import ErrorHandler from "../utils/ErrorHandler.js";
-import { getTokenFromHeader, verifyToken } from "../utils/token.js"
+import ErrorHandler from "../utils/ErrorHandler.util.js";
+import { getTokenFromHeader, verifyToken } from "../utils/token.util.js"
 
 export const isLoggedIn = (req, res, next) => {
     //get token from header

@@ -1,7 +1,8 @@
-import ErrorHandler from "../utils/ErrorHandler.js";
+import ErrorHandler from "../utils/ErrorHandler.util.js";
 
 export const globalErrHandler = (err, req, res, next) => {
   //stack
+  //statusCode
   //message
   const stack = err?.stack;
   const statusCode = err?.statusCode ? err?.statusCode : 500;

@@ -1,8 +1,8 @@
-import User from "../models/User.js";
+import User from "../models/User.model.js";
 import bcrypt from 'bcryptjs';
-import ErrorHandler from "../utils/ErrorHandler.js";
-import {  generateAccessToken, generateRefreshToken, verifyToken } from "../utils/token.js";
-import { cookieOptions } from "../utils/genCookiesOptions.js";
+import ErrorHandler from "../utils/ErrorHandler.util.js";
+import {  generateAccessToken, generateRefreshToken, verifyToken } from "../utils/token.util.js";
+import { cookieOptions } from "../utils/genCookiesOptions.util.js";
 
 
 // @desc Register user

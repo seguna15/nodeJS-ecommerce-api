@@ -1,12 +1,12 @@
 import express from "express";
 import { getUserProfile } from "../controllers/users.controller.js";
 import catchAsyncError from "../middlewares/catchAsyncError.middleware.js";
-import { isLoggedIn } from "../middlewares/isLoggedIn.js";
+import { isLoggedIn } from "../middlewares/isLoggedIn.middleware.js";
 
-const userRoutes = express.Router();
+const usersRoutes = express.Router();
 
-userRoutes
+usersRoutes
     .get('/profile',isLoggedIn,catchAsyncError(getUserProfile))
 
-export default userRoutes
+export default usersRoutes
 
