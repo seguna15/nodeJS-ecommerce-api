@@ -68,6 +68,28 @@ const ProductSchema = new Schema(
     }
 );
 
+
+//Virtuals
+
+//Total rating
+ProductSchema.virtual('totalReviews').get(function(){
+    const product = this;
+    return product?.reviews?.length;
+})
+
+//average ratings
+ProductSchema.virtual('averageRating').get(function(){
+    let ratingsTotal = 0;
+    const product = this;
+    product?.reviews?.forEach((review) => {
+        ratingsTotal += review?.rating;
+    })
+    //calculate average rating
+    const averageRating = Number(ratingsTotal / product?.reviews.length).toFixed(1);
+
+    return averageRating
+})
+
 const Product = mongoose.model("Product", ProductSchema);
 
 export default Product;

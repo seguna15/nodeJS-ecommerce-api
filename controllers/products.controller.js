@@ -159,7 +159,6 @@ export const getProducts = async (req, res) => {
   });
 }
 
-
 /**
  * @desc Get single product
  * @route GET /api/v1/products/:id
@@ -169,7 +168,7 @@ export const getProduct = async (req, res) => {
     
     const id = req.params.id;
     
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate('reviews');
 
     if(!product) {
         throw new ErrorHandler('Product not found', 404)
