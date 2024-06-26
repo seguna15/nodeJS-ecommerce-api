@@ -71,6 +71,12 @@ const ProductSchema = new Schema(
 
 //Virtuals
 
+//Total quantity left
+ProductSchema.virtual('qtyLeft').get(function(){
+    const product = this
+    return product.totalQty - product.totalSold
+})
+
 //Total rating
 ProductSchema.virtual('totalReviews').get(function(){
     const product = this;
@@ -84,6 +90,7 @@ ProductSchema.virtual('averageRating').get(function(){
     product?.reviews?.forEach((review) => {
         ratingsTotal += review?.rating;
     })
+    
     //calculate average rating
     const averageRating = Number(ratingsTotal / product?.reviews.length).toFixed(1);
 

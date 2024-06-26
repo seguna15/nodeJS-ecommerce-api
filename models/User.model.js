@@ -25,12 +25,12 @@ const UserSchema = new Schema(
         wishLists: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'wishList',
+                ref: 'Wishlist',
             },
         ], 
         isAdmin: {
             type: Boolean,
-            default: false,
+            default: false, 
         },
         hasShippingAddress: {
             type: Boolean,

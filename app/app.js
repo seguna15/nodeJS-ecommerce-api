@@ -1,14 +1,15 @@
 import express from 'express';
 import dbConnect from '../config/dbConnect.js';
-import usersRoutes from '../routes/users.route.js';
-import authRoute from "../routes/auth.route.js";
+import usersRoutes from '../routes/users.routes.js';
+import authRoute from "../routes/auth.routes.js";
 import { globalErrHandler, notFound } from '../middlewares/globalErrorHandler.middleware.js';
 import cookieParser from 'cookie-parser';
-import productsRoutes from '../routes/products.route.js';
-import categoriesRoutes from '../routes/categories.route.js';
-import brandsRoutes from '../routes/brands.route.js';
-import colorsRoutes from '../routes/colors.route.js';
-import reviewsRoutes from '../routes/review.route.js';
+import productsRoutes from '../routes/products.routes.js';
+import categoriesRoutes from '../routes/categories.routes.js';
+import brandsRoutes from '../routes/brands.routes.js';
+import colorsRoutes from '../routes/colors.routes.js';
+import reviewsRoutes from '../routes/reviews.routes.js';
+import ordersRoutes from '../routes/orders.routes.js';
 
 
 //db Connect
@@ -27,6 +28,7 @@ app.use("/api/v1/categories", categoriesRoutes)
 app.use("/api/v1/brands", brandsRoutes)
 app.use("/api/v1/colors", colorsRoutes)
 app.use('/api/v1/reviews', reviewsRoutes)
+app.use('/api/v1/orders', ordersRoutes)
 
 
 //err middleware

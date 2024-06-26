@@ -91,7 +91,7 @@ export const loginUser = async (req, res) => {
         });
     }
 
-    throw new ErrorHandler("Invalid login credential", 401);
+    throw new ErrorHandler("Invalid login credential", 40);
   
 };
 
