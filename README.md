@@ -9,10 +9,12 @@ npm install
 ## Create .env file
 
 ```.env
-PORT=7000
-MONGO_URI=mongo db url from local mongoDB or Atlas
-JWT_ACCESS_KEY= random string
-JWT_REFRESH_KEY= random string
+PORT=
+MONGO_URI=
+JWT_ACCESS_KEY=
+JWT_REFRESH_KEY=
+STRIPE_KEY=
+STRIPE_WEBHOOK_SECRET=
 ```
 
 ## Functionality
@@ -26,3 +28,9 @@ JWT_REFRESH_KEY= random string
 ## Order
 
 Product -> Cart -> Payment (Stripe || Paypal) -> Webhook to notify server of transaction status. -> Update Order
+
+Open new terminal
+
+```bash
+stripe listen --forward-to localhost:{PORT_NUMBER}/webhook
+```

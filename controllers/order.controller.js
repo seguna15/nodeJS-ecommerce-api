@@ -1,7 +1,14 @@
+import Coupon from "../models/Coupon.model.js";
 import Order from "../models/Order.model.js";
 import Product from "../models/Product.model.js";
 import User from "../models/User.model.js";
 import ErrorHandler from "../utils/ErrorHandler.util.js";
+import Stripe from "stripe";
+
+//stripe
+
+const stripe = new Stripe(process.env.STRIPE_KEY);
+
 
 /**
  * @desc Create new orders
@@ -10,6 +17,23 @@ import ErrorHandler from "../utils/ErrorHandler.util.js";
 */
 
 export const createOrder = async (req, res) => {
+  //get the coupon
+  const {coupon} = req?.query;
+ 
+  const couponFound =  await Coupon.findOne({code: coupon?.toUpperCase()})
+  
+  if(couponFound?.isExpired){
+    throw new ErrorHandler("Coupon has expired", 400)
+  }
+
+  if(!couponFound){
+    throw new ErrorHandler("Coupon does not exist", 400);
+  }
+
+
+  //get discount
+  const discount = couponFound?.discount / 100;
+
   //Get the payload (customer, orderItems, shippingAddress, totalPrice)
     const {orderItems, shippingAddress, totalPrice} = req.body;
     
@@ -31,9 +55,9 @@ export const createOrder = async (req, res) => {
         user: userFound._id,
         orderItems,
         shippingAddress,
-        totalPrice
+        totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice
     })
-
+    console.log(order)
     //push order into user
     userFound.orders.push(order?._id)
     await userFound.save();
@@ -52,13 +76,95 @@ export const createOrder = async (req, res) => {
     });
   //make payment (stripe or paypal)
 
+  //convert order items to have same structure that stripe needs
+  const convertedOrders = orderItems.map((item) => {
+    return {
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item?.name,
+          description: item?.description,
+        },
+        unit_amount: item?.price * 100,
+      },
+      quantity: item?.totalQtyBuying
+    }
+  })
+    const session = await stripe.checkout.sessions.create({
+      line_items: convertedOrders,
+      metadata: {
+        orderId: JSON.stringify(order?._id),
+      },
+      mode: "payment",
+      success_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
+    });
+    return res.send({url: session.url})
   //Payment webhook
 
-  //Update the user order
+  
+}
+
+/**
+ * @desc Get all orders
+ * @route GET /api/v1/orders
+ * @access Private
+*/
+export const getAllOrders = async (req, res) => {
+  //find all orders
+  const orders = await Order.find();
+
+  //pagination
+
   res.json({
     success: true,
-    message: "Order created",
+    message: "All orders",
+    orders
+  });
+}
+
+
+/**
+ * @desc Get single orders
+ * @route GET /api/v1/orders/:id
+ * @access Private/admin
+*/
+
+export const getSingleOrder = async (req, res) => {
+  // get the id from params
+  const id = req.params.id;
+  const order = await Order.findById(id);
+
+  //send response
+  res.status(200).json({
+    success: true,
+    message: "Single order",
     order,
-    userFound,
   })
 }
+
+/**
+ * @desc Update order status
+ * @route PATCH /api/v1/orders/update/:id
+ * @access Private/admin
+*/
+export const updateOrder = async (req, res) => {
+  // get the id from params
+  const id = req.params.id;
+  //update
+  const updatedOrder = await Order.findByIdAndUpdate(
+    id,
+    {
+      status: req.body.status,
+    },
+    { new: true }
+  );
+
+  //send response
+  res.status(200).json({
+    success: true,
+    message: "order status updated",
+    updatedOrder,
+  });
+}
+

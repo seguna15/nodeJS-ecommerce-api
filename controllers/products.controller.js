@@ -55,7 +55,7 @@ export const createProduct = async (req, res) => {
     //resave brand
     await brandFound.save()
     //send response
-    res.status(201).json({
+    return res.status(201).json({
         success: "true",
         message: "Product created successfully",
         product,

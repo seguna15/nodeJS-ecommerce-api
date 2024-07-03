@@ -91,7 +91,7 @@ export const loginUser = async (req, res) => {
         });
     }
 
-    throw new ErrorHandler("Invalid login credential", 40);
+    throw new ErrorHandler("Invalid login credential", 403);
   
 };
 
@@ -129,7 +129,6 @@ export const refreshAccessToken = async(req, res) => {
     throw new ErrorHandler("Token is invalid", 403);
 
   }
-
   // Verify the token sent by the found user
   const verifiedUserToken =  verifyToken(refreshToken, process.env.JWT_REFRESH_KEY);
 
@@ -141,7 +140,7 @@ export const refreshAccessToken = async(req, res) => {
     res.clearCookie("AuthCookies", { httpOnly: true });
     throw new ErrorHandler("Token is invalid", 403);
   }
-
+a
 
   const accessToken = generateAccessToken(userFound._id);
 
@@ -161,7 +160,7 @@ export const logoutUser = async (req, res) => {
   if(!cookies?.AuthCookies){
       return res.status(200).json({ success: true,  message: "user logged out successfully" });
   }
-
+ur
   //get cookie and find the user with the cookies
   const refreshToken = cookies.AuthCookies;
   const userFound = await User.findOne({sessions: refreshToken});

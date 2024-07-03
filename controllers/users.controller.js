@@ -6,8 +6,13 @@ import User from "../models/User.model.js";
  * @access Private
  */
 export const getUserProfile = async(req, res) =>{
-  
-  return res.status(200).json({message: "welcome to profile page."})
+  //find user
+  const userFound = await User.findById(req.userAuthId).populate('orders');
+  return res.status(200).json({
+    success: true,
+    message: "User profile fetched successfully",
+    userFound
+  })
 }
 
 /**
