@@ -7,10 +7,11 @@ import ErrorHandler from "../utils/ErrorHandler.util.js";
 *   @access Private/Admin
 */
 export const createCategory = async (req,res) => {
+    const convertedImage = req.file.path;
     const {name} = req.body;
-
+    
     //category exists
-    const categoryFound = await Category.findOne({name});
+    const categoryFound = await Category.findOne({name: name.toLowerCase()});
     if(categoryFound){
         throw new ErrorHandler("Category already exists", 409);
     }
@@ -19,6 +20,7 @@ export const createCategory = async (req,res) => {
     const  category = await Category.create({
         name: name.toLowerCase(),
         user: req.userAuthId,
+        image: convertedImage
     });
 
     res.status(200).json({

@@ -140,7 +140,7 @@ export const refreshAccessToken = async(req, res) => {
     res.clearCookie("AuthCookies", { httpOnly: true });
     throw new ErrorHandler("Token is invalid", 403);
   }
-a
+
 
   const accessToken = generateAccessToken(userFound._id);
 

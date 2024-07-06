@@ -57,7 +57,7 @@ export const createOrder = async (req, res) => {
         shippingAddress,
         totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice
     })
-    console.log(order)
+    
     //push order into user
     userFound.orders.push(order?._id)
     await userFound.save();
@@ -166,5 +166,63 @@ export const updateOrder = async (req, res) => {
     message: "order status updated",
     updatedOrder,
   });
+}
+
+/**
+ * @desc Get order stats
+ * @route GET /api/v1/orders/sales/stats
+ * @access Private/admin
+*/
+
+export const getOrderStats = async (req, res) => {
+  
+  //get minimum order
+  const getOrderStats = await Order.aggregate([
+    {
+      "$group": {
+        _id: null,
+        minimumSale: {
+          $min: "$totalPrice"
+        },
+        maximumSale: {
+          $max: "$totalPrice"
+        },
+        totalSales: {
+          $sum: "$totalPrice"
+        },
+        avgSale:{
+          $avg:  "$totalPrice",
+        }
+      }
+    }
+  ])
+
+  //get the date
+  const date = new Date();
+  const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  
+  const salesStatsToday = await Order.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: today,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalSales: {
+          $sum: "$totalPrice"
+        }
+      }
+    }
+  ])
+
+  return res.status(200).json({
+    success: true,
+    message: "Sum of orders",
+    getOrderStats, salesStatsToday
+  })
 }
 
