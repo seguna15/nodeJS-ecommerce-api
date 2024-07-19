@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from "cors"
 import dbConnect from '../config/dbConnect.js';
 import usersRoutes from '../routes/users.routes.js';
 import authRoute from "../routes/auth.routes.js";
@@ -19,12 +20,21 @@ import couponsRoutes from '../routes/coupons.routes.js';
 dbConnect()
 const app = express();
 
+//cors
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:3000"],
+    credentials: true,
+  })
+);
+
 //Stripe webhook
 app.use("/webhook", stripeRouter)
 
 //pass incoming data
 app.use(express.json())
 app.use(cookieParser())
+
 
 
 

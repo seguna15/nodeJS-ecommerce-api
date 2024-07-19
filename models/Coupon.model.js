@@ -20,6 +20,7 @@ const CouponSchema = new Schema(
         discount: {
             type: Number,
             required: true,
+            default: 0,
         },
         user: {
             type: Schema.Types.ObjectId,

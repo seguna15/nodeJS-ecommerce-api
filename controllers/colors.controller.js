@@ -10,7 +10,7 @@ export const createColor = async (req,res) => {
     const {name} = req.body;
 
     //color exists
-    const colorFound = await Color.findOne({name});
+    const colorFound = await Color.findOne({name: name.toLowerCase()});
     if(colorFound){
         throw new ErrorHandler("Color already exists", 409);
     }

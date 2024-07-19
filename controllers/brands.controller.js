@@ -2,15 +2,16 @@ import Brand from "../models/Brand.model.js";
 import ErrorHandler from "../utils/ErrorHandler.util.js";
 
 /**
-*   @desc   Create new Brand
+*   @desc   Create Brand
 *   @route  POST /api/v1/brands
 *   @access Private/Admin
 */
+
 export const createBrand = async (req,res) => {
     const {name} = req.body;
 
     //brand exists
-    const brandFound = await Brand.findOne({name});
+    const brandFound = await Brand.findOne({name: name.toLowerCase()});
     if(brandFound){
         throw new ErrorHandler("Brand already exists", 409);
     }
@@ -21,7 +22,7 @@ export const createBrand = async (req,res) => {
         user: req.userAuthId,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
         success: true,
         message: "Brand created successfully",
         brand
@@ -66,7 +67,7 @@ export const getBrand = async (req,res) => {
 
 /**
  * @desc Update Brand
- * @route PUT /api/v1/products/:id/update
+ * @route PUT /api/v1/brands/:id/update
  * @access Private/Admin
 */
 export const updateBrand = async (req, res) => {

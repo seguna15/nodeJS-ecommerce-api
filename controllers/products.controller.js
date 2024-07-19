@@ -9,6 +9,7 @@ import ErrorHandler from "../utils/ErrorHandler.util.js";
  * @access Private/Admin
 */
 export const createProduct = async (req, res) => {
+  
   const convertedImages = req.files.map((file) => file.path);
 
     const { name, description, brand, category, sizes, colors, price, totalQty } =

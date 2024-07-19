@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 //generates access token
 export const generateAccessToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_ACCESS_KEY, { expiresIn: "1hr" });
+  return jwt.sign({ id }, process.env.JWT_ACCESS_KEY, { expiresIn: "5m" });
 };
 
 //generate refresh token

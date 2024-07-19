@@ -32,7 +32,7 @@ export const createOrder = async (req, res) => {
 
 
   //get discount
-  const discount = couponFound?.discount / 100;
+  //const discount = couponFound?.discount / 100;
 
   //Get the payload (customer, orderItems, shippingAddress, totalPrice)
     const {orderItems, shippingAddress, totalPrice} = req.body;
@@ -55,7 +55,8 @@ export const createOrder = async (req, res) => {
         user: userFound._id,
         orderItems,
         shippingAddress,
-        totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice
+        //totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice
+        totalPrice
     })
     
     //push order into user

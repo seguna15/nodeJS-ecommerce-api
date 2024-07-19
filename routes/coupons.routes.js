@@ -11,7 +11,7 @@ couponsRoutes
   .get("/", isLoggedIn, catchAsyncError(getAllCoupons))
   .put("/update/:id", isLoggedIn, isAdmin, catchAsyncError(updateCoupon))
   .delete("/delete/:id", isLoggedIn, isAdmin, catchAsyncError(deleteCoupon))
-  .get("/:id", isLoggedIn, catchAsyncError(getCoupon))
+  .get("/single", isLoggedIn, catchAsyncError(getCoupon))
   
 
 export default couponsRoutes;

@@ -29,11 +29,17 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    return res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      data: user,
-    });
+    if(user) {
+       const { password, sessions, ...rest } = user._doc;
+       return res.status(201).json({
+         success: true,
+         message: "User registered successfully",
+         data: rest,
+       });
+    }
+   
+    throw new ErrorHandler("User could not be created", 400)
+    
   
 };
 
@@ -65,11 +71,15 @@ export const loginUser = async (req, res) => {
       if (cookies?.AuthCookies) {
         //check if it in the list and if not delete all tokens to prevent fraud attempt
         const refreshToken = cookies?.AuthCookies;
-        const foundToken = await User.findOne({sessions: refreshToken });
+        const userWithToken = await User.findOne({sessions: refreshToken });
         
-        if (!foundToken) {
+        if (!userWithToken) {
           newSessionArray = [];
         }
+
+        newSessionArray = userWithToken.sessions.filter(
+          (session) => session !== refreshToken
+        );
 
         res.clearCookie("AuthCookies", { httpOnly: true });
       }

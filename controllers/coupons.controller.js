@@ -16,6 +16,7 @@ export const createCoupon = async (req, res) => {
     const couponsExist = await Coupon.findOne({
         code
     })
+
     if (couponsExist) {
         throw new ErrorHandler("Coupon already exist", 409);
     }
@@ -27,7 +28,7 @@ export const createCoupon = async (req, res) => {
 
     //create coupon 
     const coupon = await Coupon.create({
-        code: code?.toUpperCase(), startDate, endDate, discount, user: req.userAuthId
+        code: code?.toUpperCase(), startDate , endDate, discount, user: req.userAuthId
     });
 
     //return response
@@ -61,16 +62,25 @@ export const getAllCoupons = async (req, res) => {
 
 /**
 *   @desc   GET single Coupon
-*   @route  GET /api/v1/coupons/:id
+*   @route  GET /api/v1/coupons/
 *   @access Private/Admin
 */
 export const getCoupon = async(req, res) => {
-  const coupon = await Coupon.findById(req.params.id);
+
+  const code  = req.query.code;
+  
+  const coupon = await Coupon.findOne({code})
+  
+  //check if not found
+  if(coupon === null) throw new ErrorHandler("Coupon not found", 404)
+
+  //check if expired
+  if(coupon.isExpired) throw new ErrorHandler("Coupon has expired", 400)
 
   //send response
   return res.status(201).json({
     success: true,
-    message: "Coupon fetched successfully",
+    message: `${coupon.discount}% discount applied`,
     coupon,
   });
 }

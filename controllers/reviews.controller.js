@@ -23,7 +23,7 @@ export const createReview = async(req, res) => {
     const hasReviewed = productFound?.reviews?.find((review) => {
         return review?.user?.toString() === req.userAuthId.toString()
     })
-    console.log(hasReviewed);
+    
     if(hasReviewed){
         throw new ErrorHandler('Product has been reviewed', 409);
     }
@@ -39,7 +39,6 @@ export const createReview = async(req, res) => {
     productFound.reviews.push(review?._id);
     await productFound.save();
 
-    
 
     return res.status(201).json({
         success: true,

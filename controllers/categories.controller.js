@@ -7,6 +7,7 @@ import ErrorHandler from "../utils/ErrorHandler.util.js";
 *   @access Private/Admin
 */
 export const createCategory = async (req,res) => {
+   
     const convertedImage = req.file.path;
     const {name} = req.body;
     
@@ -17,13 +18,13 @@ export const createCategory = async (req,res) => {
     }
 
     //create
-    const  category = await Category.create({
-        name: name.toLowerCase(),
-        user: req.userAuthId,
-        image: convertedImage
+    const category = await Category.create({
+      name: name?.toLowerCase(),
+      user: req.userAuthId,
+      image: convertedImage,
     });
 
-    res.status(200).json({
+    return res.status(201).json({
         success: true,
         message: "Category created successfully",
         category
