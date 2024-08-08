@@ -18,7 +18,7 @@ const stripe = new Stripe(process.env.STRIPE_KEY);
 
 export const createOrder = async (req, res) => {
   //get the coupon
-  const {coupon} = req?.query;
+  /* const {coupon} = req?.query;
  
   const couponFound =  await Coupon.findOne({code: coupon?.toUpperCase()})
   
@@ -29,7 +29,7 @@ export const createOrder = async (req, res) => {
   if(!couponFound){
     throw new ErrorHandler("Coupon does not exist", 400);
   }
-
+ */
 
   //get discount
   //const discount = couponFound?.discount / 100;
@@ -70,7 +70,7 @@ export const createOrder = async (req, res) => {
       });
 
       if (product) {
-        product.totalSold += order.totalQtyBuying;
+        product.totalSold += order.qty;
       }
 
       await product.save();
@@ -88,7 +88,7 @@ export const createOrder = async (req, res) => {
         },
         unit_amount: item?.price * 100,
       },
-      quantity: item?.totalQtyBuying
+      quantity: item?.qty
     }
   })
     const session = await stripe.checkout.sessions.create({
@@ -97,8 +97,8 @@ export const createOrder = async (req, res) => {
         orderId: JSON.stringify(order?._id),
       },
       mode: "payment",
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: "http://localhost:5173/success",
+      cancel_url: "http://localhost:5173/cancel",
     });
     return res.send({url: session.url})
   //Payment webhook
