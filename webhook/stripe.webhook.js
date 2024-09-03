@@ -22,12 +22,12 @@ stripeRouter.post(
     } catch (err) {
         console.log("err", err.message)
       response.status(400).send(`Webhook Error: ${err.message}`);
-      return;
+      return;s
     }
 
     //Handle event
     if(event.type === 'checkout.session.completed'){
-        //update the other
+        //update the ordsdcer
         const session = event.data.object;
         const {orderId} = session.metadata;
         const paymentStatus = session.payment_status;

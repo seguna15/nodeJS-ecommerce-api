@@ -129,6 +129,7 @@ export const getProducts = async (req, res) => {
   const endIndex = page * limit;
   //total
   const total = await Product.countDocuments()
+  
 
   productQuery = productQuery.skip(startIndex).limit(limit);
 
@@ -222,13 +223,13 @@ export const updateProduct = async (req, res) => {
       price,
       totalQty,
     },{
-        new: true
+        new: true,
+        runValidators: true,
     });
 
     if (!product) {
       throw new ErrorHandler("Product not found", 404);
     }
-
 
    return res.status(200).json({
         success: true,

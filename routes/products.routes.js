@@ -11,8 +11,8 @@ productsRoutes
   .post("/", isLoggedIn, isAdmin, upload.array('files'),catchAsyncError(createProduct))
   .get("/", catchAsyncError(getProducts))
   .get("/:id", catchAsyncError(getProduct))
-  .put("/:id/update", isLoggedIn, isAdmin, catchAsyncError(updateProduct))
-  .delete("/:id/delete", isLoggedIn, isAdmin, catchAsyncError(deleteProduct))
+  .put("/update/:id", isLoggedIn, isAdmin, catchAsyncError(updateProduct))
+  .delete("/delete/:id", isLoggedIn, isAdmin, catchAsyncError(deleteProduct))
 
    
 

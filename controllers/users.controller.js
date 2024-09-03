@@ -1,5 +1,21 @@
 import User from "../models/User.model.js";
 
+
+/**
+ * @desc Get all customers 
+ * @route GET /api/v1/users/customers
+ * @access Private
+ */
+export const getAllCustomers = async (req, res) => {
+  const customers = await User.find({isAdmin: false})
+
+  return res.status(200).send({
+    success: true,
+    message: "Users fetched successfully",
+    customers
+  })
+}
+
 /**
  * @desc Get user profile
  * @route POST /api/v1/users/profile
@@ -7,7 +23,7 @@ import User from "../models/User.model.js";
  */
 export const getUserProfile = async(req, res) =>{
   //find user
-  const userFound = await User.findById(req.userAuthId).populate('orders');
+  const userFound = await User.findById(req.userAuthId).select("fullname email orders isAdmin hasShippingAddress createdAt shippingAddress wishLists").populate('orders');
   return res.status(200).json({
     success: true,
     message: "User profile fetched successfully",

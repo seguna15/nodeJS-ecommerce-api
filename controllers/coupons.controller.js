@@ -1,11 +1,6 @@
 import Coupon from "../models/Coupon.model.js";
 import ErrorHandler from "../utils/ErrorHandler.util.js";
 
-/**
-*   @desc   Create new Coupon
-*   @route  POST /api/v1/coupons
-*   @access Private/Admin
-*/
 
 export const createCoupon = async (req, res) => {
 
@@ -59,10 +54,28 @@ export const getAllCoupons = async (req, res) => {
     });
 }
 
+/**
+*   @desc   GET Current Coupon
+*   @route  GET /api/v1/coupons/current
+*   @access Public
+*/
+export const getCurrentCoupon = async (req, res) => {
+  const coupon = await Coupon.find().sort({createdAt: -1}).limit(1);
+
+  //pagination
+
+  //send response
+  return res.status(201).json({
+    success: true,
+    message: "Current coupon fetched successfully",
+    coupon,
+  });
+};
+
 
 /**
 *   @desc   GET single Coupon
-*   @route  GET /api/v1/coupons/
+*   @route  GET /api/v1/coupons/single
 *   @access Private/Admin
 */
 export const getCoupon = async(req, res) => {

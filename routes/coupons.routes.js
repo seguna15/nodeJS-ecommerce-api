@@ -1,7 +1,7 @@
 import express from "express";
 import catchAsyncError from "../middlewares/catchAsyncError.middleware.js";
 import { isLoggedIn } from "../middlewares/isLoggedIn.middleware.js";
-import { createCoupon, deleteCoupon, getAllCoupons, getCoupon, updateCoupon } from "../controllers/coupons.controller.js";
+import { createCoupon, deleteCoupon, getAllCoupons, getCoupon, getCurrentCoupon, updateCoupon } from "../controllers/coupons.controller.js";
 import isAdmin from "../middlewares/isAdmin.middleware.js";
 
 const couponsRoutes = express.Router();
@@ -12,6 +12,7 @@ couponsRoutes
   .put("/update/:id", isLoggedIn, isAdmin, catchAsyncError(updateCoupon))
   .delete("/delete/:id", isLoggedIn, isAdmin, catchAsyncError(deleteCoupon))
   .get("/single", isLoggedIn, catchAsyncError(getCoupon))
+  .get("/current", catchAsyncError(getCurrentCoupon))
   
 
 export default couponsRoutes;

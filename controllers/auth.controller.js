@@ -56,6 +56,8 @@ export const loginUser = async (req, res) => {
     //Find the user by email
     const userFound = await User.findOne({ email });
 
+    
+
     if (userFound && (await bcrypt.compare(password, userFound?.password))) {
       const newRefreshToken = generateRefreshToken(userFound._id);
 
@@ -96,8 +98,11 @@ export const loginUser = async (req, res) => {
         .json({
           success: true,
           message: "User logged in successfully",
-          userData: rest,
           token: generateAccessToken(userFound._id),
+          userFound: {
+            fullname: userFound.fullname,
+            isAdmin: userFound.isAdmin,
+          }
         });
     }
 
@@ -170,7 +175,7 @@ export const logoutUser = async (req, res) => {
   if(!cookies?.AuthCookies){
       return res.status(200).json({ success: true,  message: "user logged out successfully" });
   }
-ur
+
   //get cookie and find the user with the cookies
   const refreshToken = cookies.AuthCookies;
   const userFound = await User.findOne({sessions: refreshToken});

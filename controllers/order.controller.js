@@ -35,7 +35,7 @@ export const createOrder = async (req, res) => {
   //const discount = couponFound?.discount / 100;
 
   //Get the payload (customer, orderItems, shippingAddress, totalPrice)
-    const {orderItems, shippingAddress, totalPrice} = req.body;
+   const { orderItems, shippingAddress, totalPrice } = req.body;
     
   //Find the user
   const userFound = await User.findById(req.userAuthId);
@@ -91,25 +91,25 @@ export const createOrder = async (req, res) => {
       quantity: item?.qty
     }
   })
-    const session = await stripe.checkout.sessions.create({
-      line_items: convertedOrders,
-      metadata: {
-        orderId: JSON.stringify(order?._id),
-      },
-      mode: "payment",
-      success_url: "http://localhost:5173/success",
-      cancel_url: "http://localhost:5173/cancel",
-    });
-    return res.send({url: session.url})
+  const session = await stripe.checkout.sessions.create({
+    line_items: convertedOrders,
+    metadata: {
+      orderId: JSON.stringify(order?._id),
+    },
+    mode: "payment",
+    success_url: "http://localhost:5173/success",
+    cancel_url: "http://localhost:5173/cancel",
+  });
+  return res.send({url: session.url})
   //Payment webhook
 
   
 }
 
 /**
- * @desc Get all orders
+ * @desc Fetch all orders
  * @route GET /api/v1/orders
- * @access Private
+ * @access Privates
 */
 export const getAllOrders = async (req, res) => {
   //find all orders
@@ -117,7 +117,7 @@ export const getAllOrders = async (req, res) => {
 
   //pagination
 
-  res.json({
+  return res.json({
     success: true,
     message: "All orders",
     orders
