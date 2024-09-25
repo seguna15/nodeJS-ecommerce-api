@@ -27,14 +27,14 @@ stripeRouter.post(
 
     //Handle event
     if(event.type === 'checkout.session.completed'){
-        //update the ordsdcer
+        //update the order
         const session = event.data.object;
         const {orderId} = session.metadata;
         const paymentStatus = session.payment_status;
         const paymentMethod = session.payment_method_types[0]
         const totalAmount = session.amount_total;
         const currency = session.currency;
-        const order = await Order.findByIdAndUpdate(JSON.parse(orderId), {
+        await Order.findByIdAndUpdate(JSON.parse(orderId), {
             totalPrice: totalAmount / 100,
             currency, paymentMethod, paymentStatus
         }, {new:true});

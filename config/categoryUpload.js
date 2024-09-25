@@ -26,4 +26,4 @@ const categoryUpload = multer({
     storage,
 })
 
-export default categoryUpload;
+export default categoryUpload; 

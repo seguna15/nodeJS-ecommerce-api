@@ -8,7 +8,7 @@ import isAdmin from '../middlewares/isAdmin.middleware.js';
 const categoriesRoutes = express.Router()
 
 categoriesRoutes
-.post("/",isLoggedIn, isAdmin, upload.single('file'), catchAsyncError(createCategory))
+.post("/",isLoggedIn, isAdmin, catchAsyncError(createCategory))
 .get("/", catchAsyncError(getCategories))
 .get("/:id", catchAsyncError(getCategory))
 .put('/:id/update',isLoggedIn, isAdmin, catchAsyncError(updateCategory))

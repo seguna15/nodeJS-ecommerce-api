@@ -1,10 +1,10 @@
-//brand schema
+//Accessory schema
 
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const BrandSchema = new Schema(
+const AccessorySchema = new Schema(
   {
     name: {
       type: String,
@@ -13,6 +13,11 @@ const BrandSchema = new Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    image: {
+      type: String,
+      default: "https://picsum.photos/200/300",
       required: true,
     },
     products: [
@@ -27,5 +32,5 @@ const BrandSchema = new Schema(
   }
 );
 
-const Brand = mongoose.model("Brand", BrandSchema);
-export default Brand;
+const Accessory = mongoose.model("Accessory", AccessorySchema);
+export default Accessory;

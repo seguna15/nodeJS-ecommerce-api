@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const ColorSchema = Schema(
+const ColorSchema = new Schema(
   {
     name: {
       type: String,

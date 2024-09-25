@@ -6,13 +6,14 @@ import authRoute from "../routes/auth.routes.js";
 import { globalErrHandler, notFound } from '../middlewares/globalErrorHandler.middleware.js';
 import cookieParser from 'cookie-parser';
 import productsRoutes from '../routes/products.routes.js';
-import categoriesRoutes from '../routes/categories.routes.js';
+import accessoriesRoutes from '../routes/accessories.routes.js';
 import brandsRoutes from '../routes/brands.routes.js';
 import colorsRoutes from '../routes/colors.routes.js';
 import reviewsRoutes from '../routes/reviews.routes.js';
 import ordersRoutes from '../routes/orders.routes.js';
 import stripeRouter from '../webhook/stripe.webhook.js';
 import couponsRoutes from '../routes/coupons.routes.js';
+import categoriesRoutes from '../routes/categories.routes.js';
 
 
 
@@ -36,18 +37,18 @@ app.use(express.json())
 app.use(cookieParser())
 
 
-
-
 //routes
 app.use("/api/v1/auth", authRoute)
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/products", productsRoutes)
-app.use("/api/v1/categories", categoriesRoutes)
+app.use("/api/v1/accessories", accessoriesRoutes)
 app.use("/api/v1/brands", brandsRoutes)
 app.use("/api/v1/colors", colorsRoutes)
 app.use('/api/v1/reviews', reviewsRoutes)
 app.use('/api/v1/orders', ordersRoutes)
 app.use('/api/v1/coupons', couponsRoutes)
+app.use("/api/v1/categories", categoriesRoutes)
+
 //err middleware
 app.use(notFound);
 app.use(globalErrHandler);

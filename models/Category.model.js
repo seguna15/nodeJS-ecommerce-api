@@ -1,10 +1,10 @@
-//category schema
+//Category  schema
 
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const CategorySchema = Schema(
+const CategorySchema = new Schema(
   {
     name: {
       type: String,
@@ -13,11 +13,6 @@ const CategorySchema = Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
-    },
-    image: {
-      type: String,
-      default: "https://picsum.photos/200/300",
       required: true,
     },
     products: [

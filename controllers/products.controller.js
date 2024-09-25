@@ -1,4 +1,4 @@
-import Category from "../models/Category.model.js";
+import Accessory from "../models/Accessory.model.js";
 import Brand from "../models/Brand.model.js";
 import Product from "../models/Product.model.js"
 import ErrorHandler from "../utils/ErrorHandler.util.js";
@@ -12,9 +12,10 @@ export const createProduct = async (req, res) => {
   
   const convertedImages = req.files.map((file) => file.path);
 
-    const { name, description, brand, category, sizes, colors, price, totalQty } =
+    const { name, description, brand, accessory, category, price, sizeColourQty } =
       req.body;
 
+     
     //check if product exist
     const productExist = await Product.findOne({name});
 
@@ -22,11 +23,11 @@ export const createProduct = async (req, res) => {
         throw new ErrorHandler("Product already exist", 409)
     }
 
-    //find the category
-    const categoryFound = await Category.findOne({name: category.toLowerCase()});
+    //find the accessory
+    const accessoryFound = await Accessory.findOne({name: accessory.toLowerCase()});
 
-    if(!categoryFound) {
-      throw new ErrorHandler("Category not found, create category or check category name", 400)
+    if(!accessoryFound) {
+      throw new ErrorHandler("Accessory not found, create accessory or check accessory name", 400)
     }
 
     //find the brand
@@ -40,19 +41,18 @@ export const createProduct = async (req, res) => {
       name,
       description,
       brand,
+      accessory,
       category,
-      sizes,
-      colors,
+      sizeColourQty: JSON.parse(sizeColourQty),
       user: req.userAuthId,
       price,
-      totalQty,
       images: convertedImages
     });
 
-    // push the product into category
-    categoryFound.products.push(product._id);
-    //resave category
-    await categoryFound.save()
+    // push the product into accessory
+    accessoryFound.products.push(product._id);
+    //resave accessory
+    await accessoryFound.save()
 
     // push the product into brand
     brandFound.products.push(product._id);
@@ -88,10 +88,18 @@ export const getProducts = async (req, res) => {
       brand: { $regex: req.query.brand, $options: "i" },
     });
   }
+
+  // filter by accessory
+  if (req.query.accessory) {
+    productQuery = productQuery.find({
+      accessory: { $regex: req.query.accessory, $options: "i" },
+    });
+  }
+
   // filter by category
   if (req.query.category) {
     productQuery = productQuery.find({
-      category: { $regex: req.query.category, $options: "i" },
+      category: { $eq: req.query.category },
     });
   }
 
@@ -110,46 +118,44 @@ export const getProducts = async (req, res) => {
   }
 
   //filter by price range
-  if(req.query.price){
-    const priceRange = req.query.price.split('-');
+  if (req.query.price) {
+    const priceRange = req.query.price.split("-");
     //greater than oe equal to and less than or equal to
     productQuery = productQuery.find({
-        price: {$gte: priceRange[0], $lte: priceRange[1]}
-    })
+      price: { $gte: priceRange[0], $lte: priceRange[1] },
+    });
   }
 
   //pagination
   //page
-  const page = parseInt(req.query.page) ?  parseInt(req.query.page) : 1;
+  const page = parseInt(req.query.page) ? parseInt(req.query.page) : 1;
   //limit
-  const limit = parseInt(req.query.limit) ?  parseInt(req.query.limit) : 10;
+  const limit = parseInt(req.query.limit) ? parseInt(req.query.limit) : 10;
   //startIndex
   const startIndex = (page - 1) * limit;
   //endIndex
   const endIndex = page * limit;
   //total
-  const total = await Product.countDocuments()
-  
+  const total = await Product.countDocuments();
 
   productQuery = productQuery.skip(startIndex).limit(limit);
 
   //pagination result
-  const pagination = {}
+  const pagination = {};
 
-  if(endIndex < total) {
+  if (endIndex < total) {
     pagination.next = {
-        page: page + 1,
-        limit,
-    }
+      page: page + 1,
+      limit,
+    };
   }
 
-  if(startIndex > 0){
+  if (startIndex > 0) {
     pagination.prev = {
-        page: page -1,
-        limit
-    }
+      page: page - 1,
+      limit,
+    };
   }
-
 
   //await query
   const products = await productQuery;
